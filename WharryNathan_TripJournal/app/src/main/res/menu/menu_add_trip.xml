@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.project3w.wharrynathan_tripjournal.MainActivity">
+    <item
+        android:id="@+id/action_addtrip"
+        android:orderInCategory="100"
+        android:icon="@android:drawable/ic_menu_save"
+        android:title="@string/add_trip"
+        app:showAsAction="always" />
+</menu>
