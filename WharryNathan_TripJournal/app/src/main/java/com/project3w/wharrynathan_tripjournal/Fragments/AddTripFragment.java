@@ -56,7 +56,7 @@ public class AddTripFragment extends Fragment implements AddTripActivity.OnSaveT
 
         // validate we have dates set then return our trip
         if (tripStartDate != null && tripEndDate != null) {
-            return new Trip(tripTitle, tripDesc, tripStartDate, tripEndDate);
+            return new Trip(tripTitle, tripDesc, tripStartDate.getTime(), tripEndDate.getTime());
         }
 
         return null;

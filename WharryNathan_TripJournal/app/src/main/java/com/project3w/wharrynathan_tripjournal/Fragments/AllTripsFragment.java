@@ -9,16 +9,19 @@ import android.support.design.widget.Snackbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.CalendarView;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.project3w.wharrynathan_tripjournal.AddTripActivity;
+import com.project3w.wharrynathan_tripjournal.Helpers.FirebaseDataHelper;
 import com.project3w.wharrynathan_tripjournal.Objects.Trip;
 import com.project3w.wharrynathan_tripjournal.R;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -27,12 +30,13 @@ import java.util.Locale;
  * Created by Nate on 2/6/17.
  */
 
-public class MainTripFragment extends Fragment implements CalendarView.OnDateChangeListener {
+public class AllTripsFragment extends Fragment implements CalendarView.OnDateChangeListener {
 
     // class variables
     CalendarView tripCalendar;
     ListView tripList;
     Activity mActivity;
+    FirebaseDataHelper mHelper;
 
     // interface to pass the selected date up to the main activity
     public interface SelectedDateListener {
@@ -42,7 +46,7 @@ public class MainTripFragment extends Fragment implements CalendarView.OnDateCha
     // create our interface listener
     SelectedDateListener onSelectedDateListener;
 
-    public MainTripFragment() {
+    public AllTripsFragment() {
         // empty constructor
     }
 
@@ -65,6 +69,9 @@ public class MainTripFragment extends Fragment implements CalendarView.OnDateCha
         } catch (ClassCastException e) {
             throw new ClassCastException(mActivity.toString() + " must implement OnSelectedEventListener");
         }
+
+        // pull in our helper file
+        mHelper = new FirebaseDataHelper();
     }
 
     @Override
@@ -81,6 +88,10 @@ public class MainTripFragment extends Fragment implements CalendarView.OnDateCha
 
         // add our DateChangeListener
         tripCalendar.setOnDateChangeListener(this);
+
+        // set up our listview adapter
+        ArrayAdapter<Trip> arrayAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, mHelper.getUserTrips());
+        tripList.setAdapter(arrayAdapter);
     }
 
     @Override

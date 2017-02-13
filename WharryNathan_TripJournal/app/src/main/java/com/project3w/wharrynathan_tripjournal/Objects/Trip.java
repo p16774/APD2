@@ -10,9 +10,13 @@ public class Trip {
 
     // object variables
     private String tripTitle, tripDesc;
-    private Date tripStartDate, tripEndDate;
+    private long tripStartDate, tripEndDate;
 
-    public Trip(String _tripTitle, String _tripDesc, Date _tripStartDate, Date _tripEndDate) {
+    public Trip() {
+        // empty constructor for Firebase
+    }
+
+    public Trip(String _tripTitle, String _tripDesc, long _tripStartDate, long _tripEndDate) {
         this.tripTitle = _tripTitle;
         this.tripDesc = _tripDesc;
         this.tripStartDate = _tripStartDate;
@@ -27,11 +31,11 @@ public class Trip {
         return tripDesc;
     }
 
-    public Date getTripStartDate() {
+    public long getTripStartDate() {
         return tripStartDate;
     }
 
-    public Date getTripEndDate() {
+    public long getTripEndDate() {
         return tripEndDate;
     }
 
@@ -40,8 +44,6 @@ public class Trip {
         return "Trip{" +
                 "tripTitle='" + tripTitle + '\'' +
                 ", tripDesc='" + tripDesc + '\'' +
-                ", tripStartDate=" + tripStartDate +
-                ", tripEndDate=" + tripEndDate +
                 '}';
     }
 }

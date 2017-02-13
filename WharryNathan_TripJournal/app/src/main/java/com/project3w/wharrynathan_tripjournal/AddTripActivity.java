@@ -1,3 +1,7 @@
+// Nathan Wharry
+// APD2 - 1702
+// AddTripActivity
+
 package com.project3w.wharrynathan_tripjournal;
 
 import android.app.FragmentManager;
@@ -11,10 +15,17 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.project3w.wharrynathan_tripjournal.Fragments.AddTripFragment;
+import com.project3w.wharrynathan_tripjournal.Helpers.FirebaseDataHelper;
 import com.project3w.wharrynathan_tripjournal.Objects.Trip;
 
+import java.util.UUID;
+
 public class AddTripActivity extends AppCompatActivity {
+
+    FirebaseDataHelper firebaseDataHelper = new FirebaseDataHelper();
 
     public interface OnSaveTripListener {
         Trip getSavedTrip();
@@ -34,6 +45,9 @@ public class AddTripActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AddTripFragment aFrag = new AddTripFragment();
+
+        String anotherID = FirebaseInstanceId.getInstance().getId();
+        System.out.println(anotherID + " = anotherID");
 
         // try to add our interface listener
         try {
@@ -65,9 +79,10 @@ public class AddTripActivity extends AppCompatActivity {
         if (id == R.id.action_addtrip) {
             Trip enteredTrip = onSaveTripListener.getSavedTrip();
 
-            System.out.println(enteredTrip.toString());
-
-            // TODO: save trip in a helper
+            // save our trip
+            firebaseDataHelper.saveTrip(enteredTrip);
+            finish();
+            // TODO: intent to view new saved trip
         }
 
         return super.onOptionsItemSelected(item);

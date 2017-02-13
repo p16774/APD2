@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.project3w.wharrynathan_tripjournal.MainActivity">
+    tools:context="com.project3w.wharrynathan_tripjournal.AllTripsActivity">
     <item
         android:id="@+id/action_import"
         android:orderInCategory="100"

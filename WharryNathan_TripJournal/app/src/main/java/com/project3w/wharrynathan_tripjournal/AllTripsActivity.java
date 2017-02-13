@@ -10,11 +10,13 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.project3w.wharrynathan_tripjournal.Fragments.MainTripFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.project3w.wharrynathan_tripjournal.Fragments.AllTripsFragment;
 
-import java.util.Calendar;
+import java.util.UUID;
 
-public class MainActivity extends AppCompatActivity implements MainTripFragment.SelectedDateListener {
+public class AllTripsActivity extends AppCompatActivity implements AllTripsFragment.SelectedDateListener {
 
     // class variables
     String currentSelectedDate;
@@ -23,16 +25,19 @@ public class MainActivity extends AppCompatActivity implements MainTripFragment.
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_trip);
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
         // add our tripfragment
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MainTripFragment tFrag = new MainTripFragment();
+        AllTripsFragment tFrag = new AllTripsFragment();
         fragmentTransaction.add(R.id.trip_container, tFrag);
         fragmentTransaction.commit();
+
+        String uniqueID = FirebaseInstanceId.getInstance().getId();;
+        System.out.println(uniqueID + " = uniqueID");
 
     }
 
@@ -43,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements MainTripFragment.
         // add our tripfragment
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        MainTripFragment tFrag = new MainTripFragment();
+        AllTripsFragment tFrag = new AllTripsFragment();
         fragmentTransaction.replace(R.id.trip_container, tFrag);
         fragmentTransaction.commit();
     }
@@ -71,6 +76,8 @@ public class MainActivity extends AppCompatActivity implements MainTripFragment.
 
         } else if (id == R.id.action_import) {
             Snackbar.make(this.findViewById(android.R.id.content), "Import Trip Successful", Snackbar.LENGTH_LONG).show();
+            FirebaseAuth.getInstance().signOut();
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
