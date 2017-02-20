@@ -9,18 +9,58 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.project3w.wharrynathan_tripjournal.Fragments.AllTripsFragment;
+import com.project3w.wharrynathan_tripjournal.Helpers.GetAllTripsHelper;
+import com.project3w.wharrynathan_tripjournal.Objects.Trip;
 
-import java.util.UUID;
+import java.util.ArrayList;
 
-public class AllTripsActivity extends AppCompatActivity implements AllTripsFragment.SelectedDateListener {
+public class AllTripsActivity extends AppCompatActivity implements AllTripsFragment.SelectedDateListener, GetAllTripsHelper.UpdateListViewListener {
 
     // class variables
     String currentSelectedDate;
+    ArrayList<Trip> userTripArray;
+    GetAllTripsHelper mHelper;
+    boolean completedFirstLoad = false;
+
+    // string variables for intent and fragment
+    public static final String ALL_TRIPS_TAG = "com.project3w.wharrynathan_tripjournal.ALL_TRIPS_TAG";
     public static final String EXTRA_CURRENT_DATE = "com.project3w.wharrynathan_tripjournal.EXTRA_CURRENT_DATE";
+    public static final String EXTRA_TRIP_ARRAY = "com.project3w.wharrynathan_tripjournal.EXTRA_TRIP_ARRAY";
+
+    public void updateTripsList(ArrayList<Trip> userTripsArrayList) {
+
+        // replace our tripfragment to rerun code
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        AllTripsFragment tFrag = new AllTripsFragment();
+
+        // create bundle of arraylist
+        Bundle listData = new Bundle();
+        listData.putSerializable(EXTRA_TRIP_ARRAY, userTripsArrayList);
+
+        // attach bundle and commit fragment
+        tFrag.setArguments(listData);
+        fragmentTransaction.replace(R.id.trip_container, tFrag, ALL_TRIPS_TAG);
+        fragmentTransaction.commit();
+
+        View progressBar = findViewById(R.id.alltrips_progressbar);
+        progressBar.setVisibility(View.GONE);
+
+        completedFirstLoad = true;
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // assign helper file and call our data
+        mHelper = new GetAllTripsHelper(this);
+        mHelper.getUserTrips();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,15 +69,8 @@ public class AllTripsActivity extends AppCompatActivity implements AllTripsFragm
         Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(toolbar);
 
-        // add our tripfragment
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AllTripsFragment tFrag = new AllTripsFragment();
-        fragmentTransaction.add(R.id.trip_container, tFrag);
-        fragmentTransaction.commit();
-
-        String uniqueID = FirebaseInstanceId.getInstance().getId();;
-        System.out.println(uniqueID + " = uniqueID");
+        View progressBar = findViewById(R.id.alltrips_progressbar);
+        progressBar.setVisibility(View.VISIBLE);
 
     }
 
@@ -45,18 +78,19 @@ public class AllTripsActivity extends AppCompatActivity implements AllTripsFragm
     protected void onPostResume() {
         super.onPostResume();
 
-        // add our tripfragment
-        FragmentManager fragmentManager = getFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        AllTripsFragment tFrag = new AllTripsFragment();
-        fragmentTransaction.replace(R.id.trip_container, tFrag);
-        fragmentTransaction.commit();
+        if (completedFirstLoad) {
+            getFragmentManager().beginTransaction().remove(getFragmentManager().findFragmentByTag(ALL_TRIPS_TAG)).commit();
+            View progressBar = findViewById(R.id.alltrips_progressbar);
+            progressBar.setVisibility(View.VISIBLE);
+            mHelper.getUserTrips();
+        }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_add_trip, menu);
         return true;
     }
 
@@ -76,6 +110,8 @@ public class AllTripsActivity extends AppCompatActivity implements AllTripsFragm
 
         } else if (id == R.id.action_import) {
             Snackbar.make(this.findViewById(android.R.id.content), "Import Trip Successful", Snackbar.LENGTH_LONG).show();
+
+        } else if (id == R.id.action_logout) {
             FirebaseAuth.getInstance().signOut();
             finish();
         }

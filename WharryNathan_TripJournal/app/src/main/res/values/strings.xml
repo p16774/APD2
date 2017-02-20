@@ -32,8 +32,15 @@
     <string name="enter_full_name">Enter full name</string>
     <string name="change">Change</string>
     <string name="delete">Delete</string>
-
-
+    <string name="no_saved_items">No Saved Items</string>
+    <string name="wtf">what the fuck</string>
+    <string name="add_trip_item">Add Trip Item</string>
+    <string name="add_memory">Add Memory</string>
+    <string name="logout">Logout</string>
+    <string name="enter_memory_details">Enter Memory Details</string>
+    <string name="image_of_memory">Image of Memory</string>
+    <string name="take_photo">Take Photo</string>
+    <string name="enter_trip_memory_title">Enter Trip Memory Title</string>
 
 
 </resources>

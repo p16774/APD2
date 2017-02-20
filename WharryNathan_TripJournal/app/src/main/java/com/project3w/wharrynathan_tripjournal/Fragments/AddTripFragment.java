@@ -20,6 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Created by Nate on 2/7/17.
@@ -54,9 +55,16 @@ public class AddTripFragment extends Fragment implements AddTripActivity.OnSaveT
             e.printStackTrace();
         }
 
-        // validate we have dates set then return our trip
-        if (tripStartDate != null && tripEndDate != null) {
-            return new Trip(tripTitle, tripDesc, tripStartDate.getTime(), tripEndDate.getTime());
+        // validate for null fields and return Trip
+        if (tripStartDate != null && tripEndDate != null && !tripTitle.equals("") && !tripDesc.equals("")) {
+
+            // generate unique id for tripId and database reference
+            long genericLong = UUID.randomUUID().getLeastSignificantBits();
+            String significantLong = genericLong + "";
+            String tripId = significantLong.substring(1);
+
+            // return our trip object to save
+            return new Trip(tripId, tripTitle, tripDesc, tripStartDate.getTime(), tripEndDate.getTime());
         }
 
         return null;

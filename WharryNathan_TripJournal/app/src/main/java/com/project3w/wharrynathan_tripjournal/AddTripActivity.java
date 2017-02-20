@@ -15,15 +15,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.project3w.wharrynathan_tripjournal.Fragments.AddTripFragment;
+import com.project3w.wharrynathan_tripjournal.Fragments.AllTripsFragment;
 import com.project3w.wharrynathan_tripjournal.Helpers.FirebaseDataHelper;
 import com.project3w.wharrynathan_tripjournal.Objects.Trip;
 
-import java.util.UUID;
-
 public class AddTripActivity extends AppCompatActivity {
+
+
+    public static final String ADD_TRIP_TAG = "com.project3w.wharrynathan_tripjournal.ADD_TRIP_TAG";
 
     FirebaseDataHelper firebaseDataHelper = new FirebaseDataHelper();
 
@@ -46,25 +47,22 @@ public class AddTripActivity extends AppCompatActivity {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         AddTripFragment aFrag = new AddTripFragment();
 
-        String anotherID = FirebaseInstanceId.getInstance().getId();
-        System.out.println(anotherID + " = anotherID");
-
         // try to add our interface listener
         try {
             onSaveTripListener = (OnSaveTripListener) aFrag;
         } catch (ClassCastException e) {
-            throw new ClassCastException(aFrag.toString() + " must implement OnSelectedEventListener");
+            throw new ClassCastException(aFrag.toString() + " must implement OnSaveTripListener");
         }
 
         // commit the transaction
-        fragmentTransaction.add(R.id.add_trip_container, aFrag);
+        fragmentTransaction.add(R.id.add_trip_container, aFrag, ADD_TRIP_TAG);
         fragmentTransaction.commit();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_add_trip, menu);
+        getMenuInflater().inflate(R.menu.menu_save_trip, menu);
         return true;
     }
 
@@ -79,10 +77,22 @@ public class AddTripActivity extends AppCompatActivity {
         if (id == R.id.action_addtrip) {
             Trip enteredTrip = onSaveTripListener.getSavedTrip();
 
-            // save our trip
-            firebaseDataHelper.saveTrip(enteredTrip);
-            finish();
-            // TODO: intent to view new saved trip
+            if (enteredTrip != null) {
+
+                // save our trip
+                firebaseDataHelper.saveTrip(enteredTrip);
+
+                // pass us over to the view trip activity
+                Intent viewNewTrip = new Intent(this, ViewTripActivity.class);
+                viewNewTrip.putExtra(AllTripsFragment.EXTRA_SELECTED_TRIP, enteredTrip);
+                startActivity(viewNewTrip);
+
+                // close this activity
+                finish();
+
+            } else {
+                Snackbar.make(this.findViewById(android.R.id.content), "You must fill out all fields to save trip.", Snackbar.LENGTH_LONG).show();
+            }
         }
 
         return super.onOptionsItemSelected(item);

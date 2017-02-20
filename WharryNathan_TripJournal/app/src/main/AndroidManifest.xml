@@ -3,6 +3,9 @@
     package="com.project3w.wharrynathan_tripjournal">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
+    <uses-feature android:name="android.hardware.camera2" android:required="true" />
 
     <meta-data
         android:name="com.google.android.gms.version"
@@ -28,7 +31,24 @@
         <activity android:name=".SignupActivity"
             android:label="Create New Account"/>
         <activity android:name=".AddTripActivity"
-            android:label="@string/label_addtrip"/>
+            android:label="@string/label_addtrip"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ViewTripActivity"/>
+        <activity android:name=".AddTripItemActivity"
+            android:label="@string/add_memory"
+            android:windowSoftInputMode="adjustResize"/>
+        <activity android:name=".ViewItemActivity"
+            android:label="Memories"/>
     </application>
+
+    <provider
+        android:name="android.support.v4.content.FileProvider"
+        android:authorities="com.project3w.wharrynathan_tripjournal.fileprovider"
+        android:exported="false"
+        android:grantUriPermissions="true">
+        <meta-data
+            android:name="android.support.FILE_PROVIDER_PATHS"
+            android:resource="@xml/file_paths"/>
+    </provider>
 
 </manifest>
