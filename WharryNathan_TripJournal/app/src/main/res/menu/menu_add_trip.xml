@@ -1,0 +1,22 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.project3w.wharrynathan_tripjournal.AllTripsActivity">
+    <item
+        android:id="@+id/action_addtrip"
+        android:orderInCategory="100"
+        android:title="@string/new_trip"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_import"
+        android:orderInCategory="100"
+        android:title="@string/import_shared_trip"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_logout"
+        android:orderInCategory="100"
+        android:title="@string/logout"
+        app:showAsAction="never" />
+</menu>

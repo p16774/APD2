@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.project3w.wharrynathan_tripjournal.ViewTripActivity">
+
+    <item
+        android:id="@+id/action_deleteitem"
+        android:orderInCategory="100"
+        android:title="@string/delete_memory"
+        android:icon="@android:drawable/ic_menu_delete"
+        app:showAsAction="always" />
+
+</menu>
